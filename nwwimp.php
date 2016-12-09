@@ -11,9 +11,8 @@
   $reverseGeocodingRawUrl = 'http://data.wien.gv.at/daten/OGDAddressService.svc/ReverseGeocode?location=%f,%f&crs=EPSG:4326&type=A3:8012';
 
   $punschUrl = 'http://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:ADVENTMARKTOGD&srsName=EPSG:4326&outputFormat=json';
-  $latitude = (float) $_GET['latitude'];
-  $longitude = (float) $_GET['longitude'];
-  define('location', ['latitude' => $latitude, 'longitude' => $longitude]);
+  define('latitude', (float) $_GET['latitude']);
+  define('longitude', (float) $_GET['longitude']);
 
   //const location = ['latitude' => 48.205452, 'longitude' => 16.347026];
 
@@ -27,10 +26,10 @@
   }
 
   function isClose($coordinates){
-    $minLat = location['latitude'] - 0.01;
-    $maxLat = location['latitude'] + 0.01;
-    $minLong = location['longitude'] - 0.01;
-    $maxLong = location['longitude'] + 0.01;
+    $minLat = latitude - 0.01;
+    $maxLat = latitude + 0.01;
+    $minLong = longitude - 0.01;
+    $maxLong = longitude + 0.01;
     if ($coordinates[1] > $minLat && $coordinates[1] < $maxLat && $coordinates[0] > $minLong && $coordinates[0] < $maxLong){
       return true;
     }
@@ -78,6 +77,6 @@
   }
 
   $tpl = new Tonic("display.html");
-  $tpl->location = location;
+  $tpl->location = ['latitude' => latitude, 'longitude' => longitude];
   $tpl->closePunsch = $closePunsch;
   echo $tpl->render();
