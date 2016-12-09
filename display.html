@@ -3,6 +3,7 @@
     <p>Latitude: {$location.latitude}</p>
     <p>Longitude: {$location.longitude}</p>
     <h2>Punsch in der Nähe</h2>
+    {if $closePunsch.count() > 0}
     {loop $punsch in $closePunsch}
     <h3>{$punsch.punsch.properties.BEZEICHNUNG}</h3>
       {loop $route in $punsch.route}
@@ -11,3 +12,7 @@
         <p>Nach: {$route.destination}</p>
       {endloop}
     {endloop}
+    {else}
+    <h3>Kein Punsch in der Nähe</h3>
+    <p>Befindest Du dich in Wien?</h3>
+    {endif}

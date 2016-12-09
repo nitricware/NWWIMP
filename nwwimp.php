@@ -11,10 +11,11 @@
   $reverseGeocodingRawUrl = 'http://data.wien.gv.at/daten/OGDAddressService.svc/ReverseGeocode?location=%f,%f&crs=EPSG:4326&type=A3:8012';
 
   $punschUrl = 'http://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:ADVENTMARKTOGD&srsName=EPSG:4326&outputFormat=json';
+  $latitude = (float) $_GET['latitude'];
+  $longitude = (float) $_GET['longitude'];
+  define('location', ['latitude' => $latitude, 'longitude' => $longitude]);
 
-  //$location = ['latitude' => $_GET['latitude'], 'longitude' => $_GET['longitude']];
-
-  const location = ['latitude' => 48.205452, 'longitude' => 16.347026];
+  //const location = ['latitude' => 48.205452, 'longitude' => 16.347026];
 
   function request($url){
     $ch = curl_init();

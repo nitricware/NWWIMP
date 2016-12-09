@@ -10,10 +10,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script type="text/javascript">
       $(document).ready(function(){
-        host = ''
-        $.get(host+'nwwimp.php',function(data){
-          document.getElementsByTagName('body')[0].innerHTML = data;
-        })
+        navigator.geolocation.getCurrentPosition(function(location) {
+          var url = 'nwwimp.php?latitude='+location.coords.latitude+'&longitude='+location.coords.longitude;
+          $.get(url,function(data){
+            document.getElementsByTagName('body')[0].innerHTML = data;
+          })
+        });
       })
     </script>
   </body>
