@@ -2,11 +2,22 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Wo ist mein Punsch?</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script type="text/javascript" src="nwwimp.js"></script>
+    <title>Wo ist mein Punsch? v0.1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   </head>
   <body>
-
+    <h1>Wo ist mein Punsch?</h1>
+    <h2>Deine Location<h2>
+    <p>Latitude: {$location.latitude}</p>
+    <p>Longitude: {$location.longitude}</p>
+    <h2>Punsch in der Nähe</h2>
+    {loop $punsch in $closePunsch}
+    <h3>{$punsch.punsch.properties.BEZEICHNUNG}</h3>
+      {loop $route in $punsch.route}
+        <h4>{$route.meansOfTransport}</h4>
+        <p>Von: {$route.origin}</p>
+        <p>Nach: {$route.destination}</p>
+      {endloop}
+    {endloop}
   </body>
 </html>
