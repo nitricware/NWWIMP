@@ -76,7 +76,7 @@
     $closePunsch[$i]['route'] = minifyRoute($routingXML);
   }
 
-  $tpl = new Tonic("index.html");
+  $tpl = new Tonic("display.html");
   $tpl->location = location;
   $tpl->closePunsch = $closePunsch;
   echo $tpl->render();

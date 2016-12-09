@@ -1,0 +1,13 @@
+    <h1>Wo ist mein Punsch?</h1>
+    <h2>Deine Location<h2>
+    <p>Latitude: {$location.latitude}</p>
+    <p>Longitude: {$location.longitude}</p>
+    <h2>Punsch in der Nähe</h2>
+    {loop $punsch in $closePunsch}
+    <h3>{$punsch.punsch.properties.BEZEICHNUNG}</h3>
+      {loop $route in $punsch.route}
+        <h4>{$route.meansOfTransport}</h4>
+        <p>Von: {$route.origin}</p>
+        <p>Nach: {$route.destination}</p>
+      {endloop}
+    {endloop}
