@@ -2,8 +2,6 @@
   include './Tonic.php';
   use Tonic\Tonic as Tonic;
 
-  $url = 'http://www.wienerlinien.at/ogd_routing/XML_TRIP_REQUEST2?locationServerActive=1&type_origin=coord&name_origin=16.347026:48.205452:WGS84&type_destination=coord&name_destination=16.353268603044167:48.19936173021695:WGS84';
-
   $wlSender = ''; // API-Key for Wiener Linien API
 
   $routingRawUrl = 'http://www.wienerlinien.at/ogd_routing/XML_TRIP_REQUEST2?locationServerActive=1&type_origin=coord&name_origin=%f:%f:WGS84&type_destination=coord&name_destination=%f:%f:WGS84&sender='.$wlSender;
@@ -11,10 +9,9 @@
   $reverseGeocodingRawUrl = 'http://data.wien.gv.at/daten/OGDAddressService.svc/ReverseGeocode?location=%f,%f&crs=EPSG:4326&type=A3:8012';
 
   $punschUrl = 'http://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:ADVENTMARKTOGD&srsName=EPSG:4326&outputFormat=json';
+
   define('latitude', (float) $_GET['latitude']);
   define('longitude', (float) $_GET['longitude']);
-
-  //const location = ['latitude' => 48.205452, 'longitude' => 16.347026];
 
   function request($url){
     $ch = curl_init();
@@ -43,19 +40,42 @@
     return $minifyPunsch;
   }
 
+  function correctTime($int){
+    if ($int < 10){
+      return '0'.$int;
+    }
+
+    return $int;
+  }
+
   function minifyRoute($route){
     foreach ($route->itdTripRequest->itdItinerary->itdRouteList->itdRoute[0]->itdPartialRouteList[0] as $partialRoute){
-      if ($partialRoute->itdMeansOfTransport['name'] == ''){
-        $meansOfTransport = (string) $partialRoute->itdMeansOfTransport['productName'];
+      $walkway = 2;
+
+      if ($partialRoute->itdMeansOfTransport['productName'] == "Fussweg"){
+        $walkway = 1;
+        $cssSelector = "transportWalk";
+      } else if($partialRoute->itdMeansOfTransport['productName'] == "U-Bahn"){
+        $cssSelector = "transport".$partialRoute->itdMeansOfTransport['shortname'];
+      } else if ($partialRoute->itdMeansOfTransport['productName'] == "Straßenbahn") {
+        $cssSelector = "transportTram";
       } else {
-        $meansOfTransport =  (string) $partialRoute->itdMeansOfTransport['name'].' (Ri. '. (string) $partialRoute->itdMeansOfTransport['destination'].')';
+        $cssSelector = "transport".$partialRoute->itdMeansOfTransport['productName'];
       }
 
-      $punschRoute[] = ['origin' => (string) $partialRoute->itdPoint[0]['name'],
-                        'destination' => (string)  $partialRoute->itdPoint[1]['name'],
-                        'meansOfTransport' => $meansOfTransport];
-
-
+      $punschRoute[] = ['origin' =>
+                          ["name" => str_replace("Wien, ", '', str_replace("Wien ", '', (string) $partialRoute->itdPoint[0]['name'])),
+                           "time" => (string) correctTime($partialRoute->itdPoint[0]->itdDateTime->itdTime['hour']).':'.correctTime($partialRoute->itdPoint[0]->itdDateTime->itdTime['minute'])],
+                        'destination' =>
+                          ["name" => str_replace("Wien, ", '', str_replace("Wien ", '', (string) $partialRoute->itdPoint[1]['name'])),
+                           "time" =>  (string) correctTime($partialRoute->itdPoint[1]->itdDateTime->itdTime['hour']).':'.correctTime($partialRoute->itdPoint[1]->itdDateTime->itdTime['minute'])],
+                        'meansOfTransport' =>
+                          ['type' => (string) $partialRoute->itdMeansOfTransport['productName'],
+                           'linenumber' => (string) $partialRoute->itdMeansOfTransport['shortname'],
+                           'direction' => str_replace("Wien, ", '', str_replace("Wien ", '',(string) $partialRoute->itdMeansOfTransport['destination']))
+                         ],
+                         'isWalkWay' => $walkway,
+                         'cssSelector' => $cssSelector];
     }
     return $punschRoute;
   }
@@ -68,7 +88,7 @@
   }
 
   for ($i=0; $i < count($closePunsch); $i++) {
-    $routingModifiedUrl = sprintf($routingRawUrl, location['longitude'], location['latitude'],$closePunsch[$i]['punsch']['coordinates'][0],$closePunsch[$i]['punsch']['coordinates'][1]);
+    $routingModifiedUrl = sprintf($routingRawUrl, longitude, latitude,$closePunsch[$i]['punsch']['coordinates'][0],$closePunsch[$i]['punsch']['coordinates'][1]);
 
     $routingResponse = request($routingModifiedUrl);
     $routingXML = simplexml_load_string($routingResponse);
@@ -79,4 +99,5 @@
   $tpl = new Tonic("display.html");
   $tpl->location = ['latitude' => latitude, 'longitude' => longitude];
   $tpl->closePunsch = $closePunsch;
+  $tpl->fussweg = "Fussweg";
   echo $tpl->render();

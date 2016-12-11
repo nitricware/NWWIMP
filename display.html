@@ -1,18 +1,38 @@
     <h1>Wo ist mein Punsch?</h1>
-    <h2>Deine Location<h2>
-    <p>Latitude: {$location.latitude}</p>
-    <p>Longitude: {$location.longitude}</p>
-    <h2>Punsch in der Nähe</h2>
     {if $closePunsch.count() > 0}
     {loop $punsch in $closePunsch}
-    <h3>{$punsch.punsch.properties.BEZEICHNUNG}</h3>
-      {loop $route in $punsch.route}
-        <h4>{$route.meansOfTransport}</h4>
-        <p>Von: {$route.origin}</p>
-        <p>Nach: {$route.destination}</p>
-      {endloop}
+    <div class="punschContainer">
+    	<h1>{$punsch.punsch.properties.BEZEICHNUNG}</h1>
+    	<p>{$punsch.punsch.properties.OEFFNUNGSZEIT.ignoreContext()}</p>
+    	<span class="button map"><a href="http://maps.google.com/?q={$punsch.punsch.properties.ADRESSE}" target="_blank">Karte</a></span>
+    	<span class="button link"><a href="{$punsch.punsch.properties.WEBLINK1.ignoreContext()}" target="_blank">Webseite</a></span>
+    	<div style="clear: both;"></div>
+    	<div class="routeContainer">
+        {loop $route in $punsch.route}
+    		<div class="partialRouteContainer">
+    			<div class="partialRouteBox meansOfTransport {$route.cssSelector}">
+            <span>
+              {if $route.isWalkWay < 2}
+      					F
+              {else}
+                {$route.meansOfTransport.linenumber}
+      				{endif}
+            </span>
+          </div>
+    			<div class="partialRouteBox partialRoutePoints">
+    				{if $route.isWalkWay > 1}
+    					<b>Richtung: {$route.meansOfTransport.direction}</b><br />
+    				{endif}
+    				{$route.origin.time} - {$route.origin.name}<br />
+    				{$route.destination.time} - {$route.destination.name}
+    			</div>
+    			<div style="clear: both;"></div>
+    		</div>
+        {endloop}
+    	</div>
+    </div>
     {endloop}
     {else}
     <h3>Kein Punsch in der Nähe</h3>
-    <p>Befindest Du dich in Wien?</h3>
+    <p>Befindest Du dich in Wien?</p>
     {endif}

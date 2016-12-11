@@ -4,18 +4,21 @@
     <meta charset="utf-8">
     <title>Wo ist mein Punsch? v0.1</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="css.css" />
   </head>
   <body>
     <div id="content">
       <h1>Bitte Warten...</h1>
+      <p style="text-align: center;">Die App muss in deinem <b>Webbrowser</b> gestartet werden und braucht die Erlaubnis, deinen <b>Standort</b> zu verwenden. Wenn du die App in einem Vorschaufenster einer anderen App verwendest (Twitter, WhatsApp,...) starte die App bitte neu in einem Browser (Chrome, Safari, Firefox,...). Außerdem muss die Adresse über <b>https://</b> aufgerufen werden.</p>
     </div>
-    <div id="footer">
-      &copy; Kurt Höblinger/NitricWare
+    <div class="footer">
+      &copy; Kurt Höblinger/<a href="http://www.nitricware.com">NitricWare</a> - Version 1.0
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script type="text/javascript">
       $(document).ready(function(){
         navigator.geolocation.getCurrentPosition(function(location) {
+          console.log(location)
           var url = 'nwwimp.php?latitude='+location.coords.latitude+'&longitude='+location.coords.longitude;
           $.get(url,function(data){
             document.getElementById('content').innerHTML = data;

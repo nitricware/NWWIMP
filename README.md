@@ -6,7 +6,7 @@ The application can be tried out here: https://www.nitricware.com/NWDev/NWWIMP/i
 
 ## Requirements
 
-NWWIMP requires Tonic by rgamba (not bundled with NWWIMP but freely available on github), PHP 5.6+ and an active internet connection as well as activated location services.
+NWWIMP requires Tonic by rgamba (not bundled with NWWIMP but freely available on github), PHP 5.6+ and an active internet connection as well as activated location services. It must be called with https!
 
 ## Dependencies
 
@@ -20,3 +20,4 @@ NWWIMP requires Tonic by rgamba (not bundled with NWWIMP but freely available on
 ## Changelog
 
 * 0.1 - initial relase
+* 1.0 - beautified UI, bugfixes and added information
