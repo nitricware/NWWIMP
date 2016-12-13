@@ -102,6 +102,10 @@ h1 {
 	color: #666666;
 }
 
+p > a {
+	color: #000000;
+}
+
 .transportAutobus
 {
 	background: blue;
