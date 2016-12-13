@@ -14,10 +14,10 @@ NWWIMP requires Tonic by rgamba (not bundled with NWWIMP but freely available on
 
 ## To-Do
 
-* beautify UI
-* add information about the christmas markets
+* enlarge search radius some times or until 3 markets were found
 
 ## Changelog
 
 * 0.1 - initial relase
 * 1.0 - beautified UI, bugfixes and added information
+* 1.0.1 - Added better information on why there is no punsch nearby, added data source link to footer
