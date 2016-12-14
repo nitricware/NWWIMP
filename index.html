@@ -18,7 +18,16 @@
     <script type="text/javascript">
       $(document).ready(function(){
         navigator.geolocation.getCurrentPosition(function(location) {
-          var url = 'nwwimp.php?latitude='+location.coords.latitude+'&longitude='+location.coords.longitude;
+          $(document).on('click', '.bugbutton', function(){
+            $('.bugbutton').innerHTML = "sende Bericht...";
+            var bugurl = 'bugreport.php?latitude='+location.coords.latitude+'&longitude='+location.coords.longitude;
+            $.get(bugurl,function(data){
+              alert('Danke für deinen Fehlerbericht!')
+              $('.bugbutton').hide();
+            })
+          })
+          var url2 = 'nwwimp.php?latitude='+location.coords.latitude+'&longitude='+location.coords.longitude;
+          var url = 'nwwimp.php?latitude=1&longitude=1';
           $.get(url,function(data){
             document.getElementById('content').innerHTML = data;
           })

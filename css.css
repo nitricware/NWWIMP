@@ -106,6 +106,17 @@ p > a {
 	color: #000000;
 }
 
+.bugbutton {
+	background: linear-gradient(0deg, #dedede, #efefef);
+	/*width: 100%;*/
+	margin: auto;
+	padding: 5px;
+	border: 1px solid #666666;
+	text-align: center;
+	border-radius: 4px;
+	margin-bottom: 10px;
+}
+
 .transportAutobus
 {
 	background: blue;
