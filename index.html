@@ -33,8 +33,7 @@
               $('.bugbutton').hide();
             })
           })
-          var url2 = 'nwwimp.php?latitude='+location.coords.latitude+'&longitude='+location.coords.longitude;
-          var url = 'nwwimp.php?latitude=1&longitude=1';
+          var url = 'nwwimp.php?latitude='+location.coords.latitude+'&longitude='+location.coords.longitude;
           $.get(url,function(data){
             document.getElementById('content').innerHTML = data;
           })
